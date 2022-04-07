@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     submit () {
-      this.$http.post("https://login.microsoftonline.com/1f1d0810-cd59-4055-868b-fd8c0739f409/oauth2/v2.0/authorize", )
+      //this.$http.post("https://login.microsoftonline.com/1f1d0810-cd59-4055-868b-fd8c0739f409/oauth2/v2.0/authorize", )
     }
   }
 };
