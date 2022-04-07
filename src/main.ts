@@ -10,7 +10,7 @@ import router from './router'
 import './index.css'
 
 
-createApp.prototype.$http = axios
+// createApp.prototype.$http = axios
 
 const app = createApp(App)
 
