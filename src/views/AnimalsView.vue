@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import HomeZoo from '@/components/HomeZoo.vue'
+import Animals from '@/components/Animals.vue'
 </script>
 
 <template>
   <main>
-    <HomeZoo />
+    <Animals />
   </main>
 </template>

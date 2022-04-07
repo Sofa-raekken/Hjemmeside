@@ -7,6 +7,9 @@
       <h3>
         <slot name="heading"></slot>
       </h3>
+      <h1>
+        <slot name="HomeZooHeading"></slot>
+      </h1>
       <slot></slot>
     </div>
   </div>
@@ -35,6 +38,13 @@ i {
 
 h3 {
   font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: var(--color-heading);
+}
+
+h1 {
+  font-size: xx-large;
   font-weight: 500;
   margin-bottom: 0.4rem;
   color: var(--color-heading);

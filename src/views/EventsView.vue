@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import HomeZoo from '@/components/HomeZoo.vue'
+import Events from '@/components/Events.vue'
 </script>
 
 <template>
   <main>
-    <HomeZoo />
+    <Events />
   </main>
 </template>
