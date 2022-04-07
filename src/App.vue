@@ -1,6 +1,34 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import {loginStore} from '@/store/login'
 import HelloWorld from '@/components/HelloWorld.vue'
+
+export default {
+  name: 'HelloWorld',
+  data() {
+    return {
+      account: undefined,
+      containers: [],
+    };
+  },
+  created() {
+    this.$emitter.on(
+      'login', (account) => {
+        this.account = account;
+        console.log(this.account);
+      }.bind(this),
+    ),
+    this.$emitter.on('logout', () => {
+        console.log('logging out');
+        this.account = undefined;
+      }.bind(this)
+    );
+  },
+  methods: {
+    ...mapMutations(['setAccessToken']),
+
+  },
+};
 </script>
 
 <template>
@@ -34,10 +62,12 @@ import HelloWorld from '@/components/HelloWorld.vue'
               <RouterLink to="/" class="block py-2 pr-4 pl-3 text-gray-700 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Contact</RouterLink>
             </li>
           </ul>
+          <button>Login</button>
         </div>
       </div>
     </nav>
   </header>
 
   <RouterView />
+
 </template>

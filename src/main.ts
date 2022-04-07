@@ -1,9 +1,13 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import axios from 'axios'
+import Emitter from 'tiny-emitter';
 
 import App from './App.vue'
 import router from './router'
+
+app.config.globalProperties.$msalInstance = {};
+app.config.globalProperties.$emitter = new Emitter();
 
 
 
