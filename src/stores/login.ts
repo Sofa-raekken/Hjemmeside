@@ -18,8 +18,8 @@ export const loginStore = defineStore({
   getters: {
   },
   actions: {
-    setAccessToken(state, token){
-      state.accessToken = token;
+    setAccessToken(token: string){
+      this.accessToken = token;
     }
   }
 })
