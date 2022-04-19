@@ -1,7 +1,8 @@
 <template>
 <div>
-  <button>Opret nyt dyr</button>
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <button class="float-right rounded bg-indigo-500 p-1 mb-3 mr-4 text-white font-semibold">Opret nyt dyr</button>
+
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
       <thead
         class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"      >
@@ -29,7 +30,7 @@
             </button>
           </td>
           <td>
-            <button>
+            <button class="button">
               Opret
             </button>
           </td>
@@ -71,7 +72,7 @@ export default {
         console.log(response.data)
       })
     },
-    CreateQR () {
+    CreateQR (id) {
       axios.get('https://sofaapi.azurewebsites.net/animals/' + id).then(response => { console.log(response.data) }).catch(error => { console.log(error) })
     }
   }
