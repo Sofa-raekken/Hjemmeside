@@ -1,7 +1,7 @@
 <template>
   <div class="bg-zoo-green text-zootext text-lg font-bold">
     <ul class="mt-10">
-      <li class="">
+      <li class="border-b-2 border-gray-500">
         <a
           v-if="!account"
           @click="SignIn"
@@ -10,21 +10,27 @@
         >
           Log ind
         </a>
-        <a v-else @click="SignOut" target="_blank" rel="noopener noreferrer">
-          <i class="fas fa-sign-out-alt fa-2x" aria-hidden="false"></i>
-        </a>
+
         <p v-if="account">{{ account.name }}</p>
       </li>
-      <li class="border-y-2 border-gray-500">
+      <li class="border-b-2 border-gray-500">
         <a href="/animals" class="text-green" >
           Dyr
         </a>
       </li>
-      <li>
+      <li class="border-b-2 border-gray-500">
         <a href="/events" >
           Begivenheder
         </a>
       </li>
+      <li class="">
+        <a href="/feedback" >
+          Feedback
+        </a>
+      </li>
+      <a v-if="account" @click="SignOut" target="_blank" rel="noopener noreferrer">
+          Log out
+      </a>
     </ul>
   </div>
 </template>
@@ -45,10 +51,17 @@ export default {
   },
   mounted () {
     const accounts = this.$msalInstance.getAllAccounts()
+    console.log('Got acconts')
     if (accounts.length === 0) {
+      console.log('Not found')
       return
     }
     this.account = accounts[0]
+    this.$msalInstance.setActiveAccount(this.account)
+    const request = {
+      scopes: ['api://a48a1ddd-adac-4b5c-981e-498871d6a602/ReadAccess']
+    }
+    this.$msalInstance.acquireTokenSilent(request).then(response => { this.$axios.defaults.headers.common = { Authorization: `Bearer ${response.accessToken}` } }).catch(err => { console.log('err ' + err) })
     this.$emitter.emit('login', this.account)
   },
   methods: {
@@ -57,6 +70,7 @@ export default {
         .loginPopup({})
         .then(() => {
           const myAccounts = this.$msalInstance.getAllAccounts()
+          // this.$axios.defaults.headers.common = {'Authorization': `bearer ${access_token}`}
           this.account = myAccounts[0]
           this.$emitter.emit('login', this.account)
         })
