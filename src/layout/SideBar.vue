@@ -1,36 +1,39 @@
 <template>
   <div class="bg-zoo-green text-zootext text-lg font-bold">
     <ul class="mt-10">
-      <li class="border-b-2 border-gray-500">
+      <li class="border-b-2 border-gray-500"  v-if="!account">
         <a
-          v-if="!account"
           @click="SignIn"
           target="_blank"
           rel="noopener noreferrer"
         >
           Log ind
         </a>
-
         <p v-if="account">{{ account.name }}</p>
       </li>
-      <li class="border-b-2 border-gray-500">
-        <a href="/animals" class="text-green" >
-          Dyr
+      <div v-else>
+        <li class="border-b-2 border-gray-500">
+          <p v-if="account">{{ account.name }}</p>
+        </li>
+        <li class="border-b-2 border-gray-500">
+          <a href="/animals" class="text-green" >
+            Dyr
+          </a>
+        </li>
+        <li class="border-b-2 border-gray-500">
+          <a href="/events" >
+            Begivenheder
+          </a>
+        </li>
+        <li class="border-b-2 border-gray-500">
+          <a href="/feedback" >
+            Feedback
+          </a>
+        </li>
+        <a @click="SignOut" target="_blank" rel="noopener noreferrer">
+            Log out
         </a>
-      </li>
-      <li class="border-b-2 border-gray-500">
-        <a href="/events" >
-          Begivenheder
-        </a>
-      </li>
-      <li class="">
-        <a href="/feedback" >
-          Feedback
-        </a>
-      </li>
-      <a v-if="account" @click="SignOut" target="_blank" rel="noopener noreferrer">
-          Log out
-      </a>
+      </div>
     </ul>
   </div>
 </template>

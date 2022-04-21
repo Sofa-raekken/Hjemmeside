@@ -25,7 +25,7 @@
             </button>
           </td>
           <td class="px-6 py-4">
-            <button v-on:click="DeleteAnimal(objAnimal.idAnimal, objAnimal.name)">
+            <button v-on:click="DeleteEvent(objAnimal.idAnimal, objAnimal.name)">
               Delete
             </button>
           </td>
@@ -109,18 +109,20 @@ export default {
       modalType: ''
     }
   },
+  computed: {
+  },
   methods: {
-    DeleteAnimal (id, name) {
+    DeleteEvent (id, name) {
       if (confirm('Er du sikker på du vil slette ' + name + '?')) {
-        axios.delete('https://sofaapi.azurewebsites.net/animals/' + id).then(response => { console.log(response.data) }).catch(error => { console.log(error) })
+        axios.delete('https://sofaapi.azurewebsites.net/events/' + id).then(response => { console.log(response.data) }).catch(error => { console.log(error) })
       }
     },
-    UpdateAnimal (objAnimal) {
+    UpdateEvent (objAnimal) {
       this.animal = objAnimal
       this.modalType = 'Opdater'
       this.showModal()
     },
-    CreateAnimal () {
+    CreateEvent () {
       this.animal = {
         birthWeight: '',
         description: '',
@@ -139,9 +141,6 @@ export default {
       axios.get('https://sofaapi.azurewebsites.net/animals/' + id).then(response => { console.log(response.data) }).catch(error => { console.log(error) })
     },
     SendRequest () {
-      if (this.animal.species === null) {
-        this.animal.species = 1
-      }
       if (this.modalType === 'Opdater') {
         axios.put('https://sofaapi.azurewebsites.net/animals/' + this.animal.idAnimal, this.animal).then((response) => { console.log(response.data) })
       } else {
