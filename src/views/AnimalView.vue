@@ -30,9 +30,9 @@
             </button>
           </td>
           <td>
-            <button class="button">
+            <a href="https://sofastorage.blob.core.windows.net/container-qrcode/test.png" download class="button" @click="Download">
               Download
-            </button>
+            </a>
           </td>
         </tr>
       </tbody>
@@ -108,8 +108,6 @@ export default {
       },
       modalType: ''
     }
-  },
-  computed: {
   },
   methods: {
     DeleteEvent (id, name) {
