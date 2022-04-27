@@ -98,19 +98,34 @@ export default {
   },
   created () {
     this.$emitter.on(
-      'login', async function (account) {
+      'loginStuff', async function (account) {
         this.account = account
-        console.log(this.account)
+        this.$msalInstance.setActiveAccount(this.account)
+        console.log('Getting Token')
+        await this.GetToken()
       }.bind(this)
     )
     this.$emitter.on('logout', function () {
       console.log('logging out')
       this.account = undefined
-    }.bind(this)
-    )
+    }.bind(this))
   },
   methods: {
-    ...mapMutations(['setAccessToken'])
+    ...mapMutations(['setAccessToken']),
+    async GetToken () {
+      const request = {
+        scopes: ['api://a48a1ddd-adac-4b5c-981e-498871d6a602/ReadAccess']
+      }
+      try {
+        const tokenResponse = await this.$msalInstance.acquireTokenSilent(request)
+        this.$axios.defaults.headers.common = { Authorization: `Bearer ${tokenResponse.accessToken}` }
+      } catch (error) {
+        const tokenResponse = await this.$msalInstance.acquireTokenPopup(request)
+        this.$axios.defaults.headers.common = { Authorization: `Bearer ${tokenResponse.accessToken}` }
+        this.$store.commit('setAccessToken', tokenResponse.accessToken)
+      }
+      // this.$emitter.emit('login', this.account)
+    }
   }
 }
 </script>

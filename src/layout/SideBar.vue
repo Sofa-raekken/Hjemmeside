@@ -1,16 +1,17 @@
 <template>
   <div class="bg-zoo-green text-zootext text-lg font-bold">
     <ul class="mt-10">
-      <li class="border-b-2 border-gray-500"  v-if="!account">
-        <a
-          @click="SignIn"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Log ind
-        </a>
-        <p v-if="account">{{ account.name }}</p>
-      </li>
+      <div v-if="!account">
+        <li class="border-b-2 border-gray-500"  >
+          <a
+            @click="SignIn"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Log ind
+          </a>
+        </li>
+      </div>
       <div v-else>
         <li class="border-b-2 border-gray-500">
           <p v-if="account">{{ account.name }}</p>
@@ -60,12 +61,8 @@ export default {
       return
     }
     this.account = accounts[0]
-    this.$msalInstance.setActiveAccount(this.account)
-    const request = {
-      scopes: ['api://a48a1ddd-adac-4b5c-981e-498871d6a602/ReadAccess']
-    }
-    this.$msalInstance.acquireTokenSilent(request).then(response => { this.$axios.defaults.headers.common = { Authorization: `Bearer ${response.accessToken}` } }).catch(err => { console.log('err ' + err) })
-    this.$emitter.emit('login', this.account)
+    this.$emitter.emit('loginStuff', this.account)
+    console.log(this.account)
   },
   methods: {
     async SignIn () {
