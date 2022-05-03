@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <button class="float-right rounded bg-indigo-500 p-1 mb-3 mr-4 text-white font-semibold" @click="showModal">Opret nyt dyr</button>
+    <button class="float-right rounded bg-indigo-500 p-1 mb-3 mr-4 text-white font-semibold" @click="CreateEvent">Opret nyt dyr</button>
 
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
       <thead
@@ -9,8 +9,8 @@
         <tr>
           <th scope="col" class="px-6 py-3">Name</th>
           <th scope="col" class="px-6 py-3">Species</th>
-          <th scope="col" class="px-6 py-3 center" colspan="2">Actions</th>
-          <th scope="col" class="px-6 py-3">Opret QR</th>
+          <th scope="col" class="px-6 py-3 text-center" colspan="2">Actions</th>
+          <th scope="col" class="px-6 py-3">Download QR</th>
         </tr>
       </thead>
       <tbody>
@@ -20,17 +20,17 @@
           </th>
           <td class="px-6 py-4">{{objAnimal.Species}}</td>
           <td class="px-6 py-4">
-            <button v-on:click="UpdateAnimal(objAnimal)">
+            <button v-on:click="UpdateAnimal(objAnimal)" class="rounded-lg bg-red-600 p-2 text-white">
               Edit
             </button>
           </td>
           <td class="px-6 py-4">
-            <button v-on:click="DeleteEvent(objAnimal.idAnimal, objAnimal.name)">
+            <button v-on:click="DeleteEvent(objAnimal.idAnimal, objAnimal.name)" class="rounded-lg bg-blue-700 text-white p-2">
               Delete
             </button>
           </td>
           <td>
-            <a href="https://sofastorage.blob.core.windows.net/container-qrcode/test.png" download class="button" @click="Download">
+            <a href="https://sofastorage.blob.core.windows.net/container-qrcode/test.png" download class="rounded-lg bg-blue-700 text-white p-2" @click="Download">
               Download
             </a>
           </td>
@@ -43,36 +43,52 @@
     :close="closeModal"
     class=""
     >
-    <div class="bg-white w-3/4 h-3/4">
-      <h2 class="center text-4xl">
+    <div class="bg-white w-1/4 p-5 rounded-xl">
+      <h2 class="text-center text-4xl">
         {{modalType}}
       </h2>
-      <div>
-        <label for="name" class="">Navn</label>
-        <input type="text" class="" id="nameInput" v-model="animal.name">
-        <label for="latinName" class="">Latinsk navn</label>
-        <input type="text" class="" id="latinNameInput" v-model="animal.latinName">
-        <label for="animalBirthweight">Fødselsvægt</label>
-        <input id="animalBirthweight" type="text" class=""/>
-        <label for="description" class="">Beskrivelse</label>
-        <input type="text" class="" id="descriptionInput" v-model="animal.description">
-        <label for="height" class="">Højde</label>
-        <input type="text" class="" id="heightInput" v-model="animal.height">
-        <label for="latinName" class="">Latinsk navn</label>
-        <input type="text" class="" id="latinNameInput" v-model="animal.latinName">
-        <label for="lifeExpectancy" class="">Levetid</label>
-        <input type="text" class="" id="lifeExpectancyInput" v-model="animal.lifeExpectancy">
-        <label for="pregnancy" class="">Graviditetslængde</label>
-        <input type="text" class="" id="pregnancyInput" v-model="animal.pregnancy">
-        <label for="weight" class="">Vægt</label>
-        <input type="text" class="" id="weightInput" v-model="animal.weight">
+      <div class="grid grid-cols-1 col-gap-1 content-center flex">
+        <div class="my-2 p-2 mx-3 rounded border-2 flex">
+          <label for="name" class="pr-2">Navn</label>
+          <input type="text" class="grow" id="nameInput" v-model="animal.name">
+        </div>
+        <div class="my-2 p-2 mx-3 rounded border-2 flex">
+          <label for="latinName" class="pr-2">Latinsk navn</label>
+          <input type="text" class="grow" id="latinNameInput" v-model="animal.latinName">
+        </div>
+        <div class="my-2 p-2 mx-3 rounded border-2 flex">
+          <label for="animalBirthweight" class="pr-2">Fødselsvægt</label>
+          <input id="animalBirthweight" type="text" class="grow"/>
+        </div>
+        <div class="my-2 p-2 mx-3 rounded border-2 flex">
+          <label for="description" class="pr-2">Beskrivelse</label>
+          <input type="text" class="grow" id="descriptionInput" v-model="animal.description">
+        </div>
+        <div class="my-2 p-2 mx-3 rounded border-2 flex">
+          <label for="height" class="pr-2">Højde</label>
+          <input type="text" class="grow" id="heightInput" v-model="animal.height">
+        </div>
+        <div class="my-2 p-2 mx-3 rounded border-2 flex">
+          <label for="lifeExpectancy" class="pr-2">Levetid</label>
+          <input type="text" class="grow" id="lifeExpectancyInput" v-model="animal.lifeExpectancy">
+        </div>
+        <div class="my-2 p-2 mx-3 rounded border-2 flex">
+          <label for="pregnancy" class="pr-2">Graviditetslængde</label>
+          <input type="text" class="grow" id="pregnancyInput" v-model="animal.pregnancy">
+        </div>
+        <div class="my-2 p-2 mx-3 rounded border-2 flex">
+          <label for="weight" class="pr-2">Vægt</label>
+          <input type="text" class="grow" id="weightInput" v-model="animal.weight">
+        </div>
       </div>
-      <button @click="SendRequest()" class="">
-        {{modalType}}
-      </button>
-      <button @click="closeModal" class="">
-        close
-      </button>
+      <div class="flow-root p-2">
+        <button @click="SendRequest()" class="float-left">
+          {{modalType}}
+        </button>
+        <button @click="closeModal" class="float-right">
+          close
+        </button>
+      </div>
     </div>
   </Modal>
 </div>
