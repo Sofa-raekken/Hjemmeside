@@ -7,30 +7,30 @@
       <thead
         class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"      >
         <tr>
-          <th scope="col" class="px-6 py-3">Name</th>
-          <th scope="col" class="px-6 py-3">Species</th>
-          <th scope="col" class="px-6 py-3 text-center" colspan="2">Actions</th>
+          <th scope="col" class="px-6 py-3" colspan="2">Name</th>
+          <!-- <th scope="col" class="px-6 py-3">Species</th> -->
+          <th scope="col" class="px-6 py-3 " colspan="2">Actions</th>
           <th scope="col" class="px-6 py-3">Download QR</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700" v-for="objAnimal in animals" :key="objAnimal.idAnimal">
-          <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+        <tr class="border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700" v-for="(objAnimal, index) in animals" :key="objAnimal.idAnimal">
+          <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap" colspan="2">
             {{objAnimal.name}}
           </th>
-          <td class="px-6 py-4">{{objAnimal.Species}}</td>
+          <!-- <td class="px-6 py-4">{{objAnimal.Species}}</td> -->
           <td class="px-6 py-4">
             <button v-on:click="UpdateAnimal(objAnimal)" class="rounded-lg bg-red-600 p-2 text-white">
               Edit
             </button>
           </td>
           <td class="px-6 py-4">
-            <button v-on:click="DeleteEvent(objAnimal.idAnimal, objAnimal.name)" class="rounded-lg bg-blue-700 text-white p-2">
+            <button v-on:click="DeleteAnimal(objAnimal, index)" class="rounded-lg bg-blue-700 text-white p-2">
               Delete
             </button>
           </td>
           <td>
-            <a href="https://sofastorage.blob.core.windows.net/container-qrcode/test.png" download class="rounded-lg bg-blue-700 text-white p-2" @click="Download">
+            <a v-bind:href="'https://sofastorage.blob.core.windows.net/container-qrcode/animal-' + objAnimal.idAnimal + '.png'" download class="rounded-lg bg-blue-700 text-white p-2" @click="Download">
               Download
             </a>
           </td>
@@ -58,7 +58,7 @@
         </div>
         <div class="my-2 p-2 mx-3 rounded border-2 flex">
           <label for="animalBirthweight" class="pr-2">Fødselsvægt</label>
-          <input id="animalBirthweight" type="text" class="grow"/>
+          <input id="animalBirthweight" type="text" class="grow" v-model="animal.birthWeight"/>
         </div>
         <div class="my-2 p-2 mx-3 rounded border-2 flex">
           <label for="description" class="pr-2">Beskrivelse</label>
@@ -66,7 +66,7 @@
         </div>
         <div class="my-2 p-2 mx-3 rounded border-2 flex">
           <label for="height" class="pr-2">Højde</label>
-          <input type="text" class="grow" id="heightInput" v-model="animal.height">
+          <input type="text" class="grow" id="heightInput" v-model="animal.heigth">
         </div>
         <div class="my-2 p-2 mx-3 rounded border-2 flex">
           <label for="lifeExpectancy" class="pr-2">Levetid</label>
@@ -95,16 +95,13 @@
 </template>
 
 <script>
-import axios from 'axios'
 
 export default {
-  beforeRouteEnter (to, from, next) {
-    next((vm) => {
-      axios.get('https://sofaapi.azurewebsites.net/animals').then((response) => {
-        vm.animals = response.data
-      }).catch((error) => {
-        console.log(error)
-      })
+  async created () {
+    this.$axios.get('https://sofaapi.azurewebsites.net/Animals/alsodisabled', { headers: { Authorization: `Bearer ${this.$cookies.get('token')}` } }).then((response) => {
+      this.animals = response.data
+    }).catch((error) => {
+      console.log(error)
     })
   },
   data () {
@@ -114,7 +111,7 @@ export default {
       animal: {
         birthWeight: '',
         description: '',
-        height: '',
+        heigth: '',
         latinName: '',
         lifeExpectancy: '',
         name: '',
@@ -126,39 +123,57 @@ export default {
     }
   },
   methods: {
-    DeleteEvent (id, name) {
-      if (confirm('Er du sikker på du vil slette ' + name + '?')) {
-        axios.delete('https://sofaapi.azurewebsites.net/events/' + id).then(response => { console.log(response.data) }).catch(error => { console.log(error) })
+    DeleteAnimal (objAnimal, index) {
+      if (confirm('Er du sikker på du vil slette ' + objAnimal.name + '?')) {
+        this.$axios.delete('https://sofaapi.azurewebsites.net/animals/' + objAnimal.idAnimal).then(this.animals.splice(index, 1)).catch(error => { console.log(error) })
       }
     },
-    UpdateEvent (objAnimal) {
+    UpdateAnimal (objAnimal) {
       this.animal = objAnimal
       this.modalType = 'Opdater'
       this.showModal()
     },
     CreateEvent () {
       this.animal = {
+        /*
         birthWeight: '',
         description: '',
-        height: '',
+        heigth: '',
         latinName: '',
         lifeExpectancy: '',
         name: '',
         pregnancy: '',
-        qr: '',
-        weight: ''
+        qr: 'ged',
+        weight: '',
+        speciesIdSpecies: 1,
+        diets: [{ idDiet: 1, diet1: 'Alt' }]
+        */
+        name: 'string',
+        latinName: 'string',
+        description: 'string',
+        weight: 'string',
+        lifeExpectancy: 'string',
+        pregnancy: 'string',
+        heigth: 'string',
+        birthWeight: 'string',
+        qr: 'string',
+        speciesIdSpecies: 1,
+        diets: [
+          {
+            idDiet: 1,
+            diet1: 'string'
+          }
+        ]
       }
       this.modalType = 'Opret'
       this.showModal()
     },
-    CreateQR (id) {
-      axios.get('https://sofaapi.azurewebsites.net/animals/' + id).then(response => { console.log(response.data) }).catch(error => { console.log(error) })
-    },
     SendRequest () {
       if (this.modalType === 'Opdater') {
-        axios.put('https://sofaapi.azurewebsites.net/animals/' + this.animal.idAnimal, this.animal).then((response) => { console.log(response.data) })
+        this.animal.speciesIdSpecies = 1
+        this.$axios.put('https://sofaapi.azurewebsites.net/animals/' + this.animal.idAnimal, this.animal).then(this.closeModal())
       } else {
-        axios.post('https://sofaapi.azurewebsites.net/animals/' + this.animal.idAnimal, this.animal).then((response) => { console.log(response.data) })
+        this.$axios.post('https://sofaapi.azurewebsites.net/animals/', this.animal).then((response) => { this.animals.push(response.data) })
       }
     },
     showModal () {

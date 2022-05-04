@@ -17,6 +17,9 @@ export default createStore({
     }
   },
   getters: {
+    getToken (state) {
+      return state.accessToken
+    }
   },
   mutations: {
     setAccessToken (state, token) {

@@ -41,6 +41,7 @@
 
 <script>
 import { PublicClientApplication } from '@azure/msal-browser'
+import { mapMutations } from 'vuex'
 
 export default {
   data () {
@@ -52,19 +53,35 @@ export default {
     this.$msalInstance = new PublicClientApplication(
       this.$store.state.msalConfig
     )
-  },
-  mounted () {
     const accounts = this.$msalInstance.getAllAccounts()
-    console.log('Got acconts')
     if (accounts.length === 0) {
       console.log('Not found')
       return
     }
     this.account = accounts[0]
-    this.$emitter.emit('loginStuff', this.account)
-    console.log(this.account)
+    this.$msalInstance.setActiveAccount(this.account)
+    this.GetToken()
   },
   methods: {
+    ...mapMutations(['setAccessToken']),
+    async GetToken () {
+      const request = {
+        scopes: ['api://a48a1ddd-adac-4b5c-981e-498871d6a602/ReadAccess']
+      }
+      try {
+        const tokenResponse = await this.$msalInstance.acquireTokenSilent(request)
+        this.$axios.defaults.headers.common = { Authorization: `Bearer ${tokenResponse.accessToken}` }
+        this.$store.commit('setAccessToken', tokenResponse.accessToken)
+        this.$cookies.set('token', tokenResponse.accessToken)
+        console.log('worked')
+      } catch (error) {
+        this.$router.push('/')
+        console.log('err')
+        const tokenResponse = await this.$msalInstance.acquireTokenPopup(request)
+        this.$axios.defaults.headers.common = { Authorization: `Bearer ${tokenResponse.accessToken}` }
+        this.$store.commit('setAccessToken', tokenResponse.accessToken)
+      }
+    },
     async SignIn () {
       await this.$msalInstance
         .loginPopup({})

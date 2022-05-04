@@ -34,7 +34,7 @@ export default ({
       this.$axios.get('https://sofaapi.azurewebsites.net/feedback?count=8').then(response => { this.feedback = response.data }).catch(err => { console.log(err) })
     },
     CloseFeedback (id) {
-      this.$axios.delete('https://sofaapi.azurewebsites.net/feedback/' + id + '/resolve')
+      this.$axios.put('https://sofaapi.azurewebsites.net/feedback/' + id + '/resolve', { isResolved: 'true' })
     }
   }
 })

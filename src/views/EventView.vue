@@ -1,14 +1,14 @@
 <template>
 <div>
   <div class="grid grid-cols-3 gap 3">
-    <div>
+    <div class="invisible">
       <select>
         <option selected value="0">
           Alle dage
         </option>
       </select>
     </div>
-    <div>
+    <div class="invisible">
       <select v-model="animalFilter">
         <option selected value="0">
           Alle
@@ -19,7 +19,7 @@
       </select>
     </div>
     <div class="center">
-      <button class="float-right rounded bg-indigo-500 p-1 mb-3 mr-4 text-white font-semibold" @click="showModal">Opret ny event</button>
+      <button class="float-right rounded bg-indigo-500 p-1 mb-3 mr-4 text-white font-semibold" @click="CreateEvent">Opret ny event</button>
     </div>
   </div>
   <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -33,15 +33,15 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700" v-for="objEvent in CleanEvents" :key="objEvent.idEvent">
+      <tr class="border-b dark:bg-gray-800 dark:border-gray-700 odd:bg-white even:bg-gray-50 odd:dark:bg-gray-800 even:dark:bg-gray-700" v-for="(objEvent, index) in CleanEvents" :key="objEvent.idEvent">
         <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
           {{objEvent.name}}
         </th>
         <td class="px-6 py-4">
-          Tidspunkt mangler
+          Ikke sat
         </td>
         <td class="px-6 py-4">
-          <button v-on:click="DeleteAnimal(objEvent.idAnimal, objEvent.name)">
+          <button v-on:click="DeleteEvent(objEvent, index)">
             Delete
           </button>
         </td>
@@ -56,36 +56,28 @@
   :close="closeModal"
   class=""
   >
-    <div class="bg-white w-3/4 h-3/4">
-      <h2 class="center text-4xl">
+    <div class="bg-white w-1/4 p-5 rounded-xl">
+      <h2 class="text-center text-4xl">
         {{modalType}}
       </h2>
-      <div>
-        <label for="name" class="">Navn</label>
-        <input type="text" class="" id="nameInput" v-model="event.name">
-        <label for="latinName" class="">Latinsk navn</label>
-        <input type="text" class="" id="latinNameInput" v-model="event.latinName">
-        <label for="animalBirthweight">Fødselsvægt</label>
-        <input id="animalBirthweight" type="text" class=""/>
-        <label for="description" class="">Beskrivelse</label>
-        <input type="text" class="" id="descriptionInput" v-model="event.description">
-        <label for="height" class="">Højde</label>
-        <input type="text" class="" id="heightInput" v-model="event.height">
-        <label for="latinName" class="">Latinsk navn</label>
-        <input type="text" class="" id="latinNameInput" v-model="event.latinName">
-        <label for="lifeExpectancy" class="">Levetid</label>
-        <input type="text" class="" id="lifeExpectancyInput" v-model="event.lifeExpectancy">
-        <label for="pregnancy" class="">Graviditetslængde</label>
-        <input type="text" class="" id="pregnancyInput" v-model="event.pregnancy">
-        <label for="weight" class="">Vægt</label>
-        <input type="text" class="" id="weightInput" v-model="event.weight">
+      <div class="grid grid-cols-1 col-gap-1 content-center flex">
+        <div class="my-2 p-2 mx-3 rounded border-2 flex">
+          <label for="name" class="pr-2">Navn</label>
+          <input type="text" class="grow" id="nameInput" v-model="event.name">
+        </div>
+        <div class="my-2 p-2 mx-3 rounded border-2 flex">
+          <label for="latinName" class="pr-2">Beskrivelse</label>
+          <input type="text" class="grow" id="latinNameInput" v-model="event.description">
+        </div>
       </div>
-      <button @click="SendRequest()" class="">
-        {{modalType}}
-      </button>
-      <button @click="closeModal" class="">
-        close
-      </button>
+      <div class="flow-root p-2">
+        <button @click="SendRequest()" class="float-left">
+          {{modalType}}
+        </button>
+        <button @click="closeModal" class="float-right">
+          close
+        </button>
+      </div>
     </div>
   </Modal>
 </div>
@@ -104,7 +96,8 @@ export default {
       events: [],
       animals: [],
       event: {},
-      animalFilter: 0
+      animalFilter: 0,
+      modalType: ''
     }
   },
   computed: {
@@ -112,7 +105,6 @@ export default {
       const arr = []
       for (let i = 0; i < this.events.length; i++) {
         const event = this.events[i]
-
         if (this.animalFilter !== 0 && event.animals[0].idAnimal !== this.animalFilter) {
           continue
         }
@@ -135,10 +127,10 @@ export default {
       this.showModal()
     },
     CreateEvent () {
-      this.objEvent = {
+      this.event = {
         description: '',
         name: '',
-        animal: {}
+        idAnimal: 1
       }
       this.modalType = 'Opret'
       this.showModal()
@@ -149,11 +141,16 @@ export default {
     closeModal () {
       this.isShow = false
     },
+    DeleteEvent (objEvent, index) {
+      if (confirm('Er du sikker på du vil slette eventen "' + objEvent.name + '"?')) {
+        this.$axios.delete('https://sofaapi.azurewebsites.net/events/' + objEvent.idEvent).then(this.events.splice(index, 1)).catch(error => { console.log(error) })
+      }
+    },
     SendRequest () {
       if (this.modalType === 'Opdater') {
         this.$axios.put('https://sofaapi.azurewebsites.net/events/' + this.event.idEvent, this.event).then((response) => { console.log(response.data) })
       } else {
-        this.$axios.post('https://sofaapi.azurewebsites.net/animals/' + this.event.idEvent, this.event).then((response) => { console.log(response.data) })
+        this.$axios.post('https://sofaapi.azurewebsites.net/events/', this.event).then((response) => { console.log(response.data) })
       }
     }
   }

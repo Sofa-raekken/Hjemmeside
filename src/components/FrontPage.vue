@@ -43,7 +43,6 @@ export default {
         this.$axios.defaults.headers.common = { Authorization: `Bearer ${tokenResponse.accessToken}` }
         this.$store.commit('setAccessToken', tokenResponse.accessToken)
       }
-      // this.$emitter.emit('login', this.account)
     }
   }
 }
