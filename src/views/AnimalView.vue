@@ -98,7 +98,7 @@
 
 export default {
   async created () {
-    this.$axios.get('https://sofaapi.azurewebsites.net/Animals/alsodisabled', { headers: { Authorization: `Bearer ${this.$cookies.get('token')}` } }).then((response) => {
+    this.$axios.get('https://sofaapi.azurewebsites.net/Animals', { headers: { Authorization: `Bearer ${this.$cookies.get('token')}` } }).then((response) => {
       this.animals = response.data
     }).catch((error) => {
       console.log(error)
