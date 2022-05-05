@@ -30,7 +30,7 @@
             </button>
           </td>
           <td>
-            <a v-bind:href="'https://sofastorage.blob.core.windows.net/container-qrcode/animal-' + objAnimal.idAnimal + '.png'" download class="rounded-lg bg-blue-700 text-white p-2" @click="Download">
+            <a v-bind:href="'https://sofastorage.blob.core.windows.net/container-qrcode/animal-' + objAnimal.idAnimal + '.png'" class="rounded-lg bg-blue-700 text-white p-2" download>
               Download
             </a>
           </td>
@@ -82,10 +82,10 @@
         </div>
       </div>
       <div class="flow-root p-2">
-        <button @click="SendRequest()" class="float-left">
+        <button @click="SendRequest()" class="float-left rounded bg-indigo-500 p-1 mb-3 mr-4 text-white font-semibold">
           {{modalType}}
         </button>
-        <button @click="closeModal" class="float-right">
+        <button @click="closeModal" class="float-right rounded bg-indigo-500 p-1 mb-3 mr-4 text-white font-semibold">
           close
         </button>
       </div>

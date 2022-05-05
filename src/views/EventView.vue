@@ -71,10 +71,10 @@
         </div>
       </div>
       <div class="flow-root p-2">
-        <button @click="SendRequest()" class="float-left">
+        <button @click="SendRequest()" class="float-left rounded bg-blue-700 p-1 mb-3 mr-4 text-white font-semibold">
           {{modalType}}
         </button>
-        <button @click="closeModal" class="float-right">
+        <button @click="closeModal" class="float-right rounded bg-blue-700 p-1 mb-3 mr-4 text-white font-semibold">
           close
         </button>
       </div>
