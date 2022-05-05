@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <button class="float-right rounded bg-indigo-500 p-1 mb-3 mr-4 text-white font-semibold" @click="CreateEvent">Opret nyt dyr</button>
+    <button class="float-right rounded bg-blue-700 p-1 mb-3 mr-4 text-white font-semibold" @click="CreateEvent">Opret nyt dyr</button>
 
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
       <thead
@@ -82,10 +82,10 @@
         </div>
       </div>
       <div class="flow-root p-2">
-        <button @click="SendRequest()" class="float-left rounded bg-indigo-500 p-1 mb-3 mr-4 text-white font-semibold">
+        <button @click="SendRequest()" class="float-left rounded bg-blue-700 p-1 mb-3 mr-4 text-white font-semibold">
           {{modalType}}
         </button>
-        <button @click="closeModal" class="float-right rounded bg-indigo-500 p-1 mb-3 mr-4 text-white font-semibold">
+        <button @click="closeModal" class="float-right rounded bg-blue-700 p-1 mb-3 mr-4 text-white font-semibold">
           close
         </button>
       </div>
@@ -135,7 +135,6 @@ export default {
     },
     CreateEvent () {
       this.animal = {
-        /*
         birthWeight: '',
         description: '',
         heigth: '',
@@ -143,27 +142,10 @@ export default {
         lifeExpectancy: '',
         name: '',
         pregnancy: '',
-        qr: 'ged',
+        qr: '',
         weight: '',
         speciesIdSpecies: 1,
-        diets: [{ idDiet: 1, diet1: 'Alt' }]
-        */
-        name: 'string',
-        latinName: 'string',
-        description: 'string',
-        weight: 'string',
-        lifeExpectancy: 'string',
-        pregnancy: 'string',
-        heigth: 'string',
-        birthWeight: 'string',
-        qr: 'string',
-        speciesIdSpecies: 1,
-        diets: [
-          {
-            idDiet: 1,
-            diet1: 'string'
-          }
-        ]
+        diets: [{ idDiet: 1, diet1: '' }]
       }
       this.modalType = 'Opret'
       this.showModal()
